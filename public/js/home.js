@@ -7,11 +7,45 @@
     let minus = $('#minus');
     let decimal = $('#decimal');
     let plus = $('#plus');
+    let lightMode = $('#lightMode');
+    let darkMode = $('#darkMode');
     
     let oldBits = 4;
     let oldBytes = 0;
     let direction;
     
+    lightMode.click(() => {
+        lightMode.attr('class', 'btn btn-secondary w-50');
+        darkMode.attr('class', 'btn btn-outline-secondary w-50');
+
+        $("h1").attr('class', 'text-center display-3');
+        $(".bg-dark").attr('class', 'bg-light');
+        $("input[type='number']").attr('class', 'form-control');
+        $("span.input-group-text").attr('class', 'input-group-text');
+        $("button.btn-outline-light").attr('class', 'btn btn-outline-secondary w-50');
+        $("button[name='maxValue'].btn-outline-secondary").attr('class', 'btn btn-outline-secondary');
+        $("#minus").attr('class', "btn btn-outline-secondary");
+        $("#plus").attr('class', "btn btn-outline-secondary");
+        $("button.btn-light").attr('class', 'btn btn-secondary w-50');
+        $("button[name='maxValue'].btn-secondary").attr('class', 'btn btn-secondary');
+    });
+
+    darkMode.click(() => {
+        lightMode.attr('class', 'btn btn-outline-secondary w-50');
+        darkMode.attr('class', 'btn btn-secondary w-50');
+
+        $("h1").attr('class', 'text-center display-3 text-white');
+        $(".bg-light").attr('class', 'bg-dark');
+        $("input[type='number']").attr('class', 'form-control bg-dark text-light');
+        $("span.input-group-text").attr('class', 'input-group-text bg-light text-dark');
+        $("button.btn-outline-secondary").attr('class', 'btn btn-outline-light w-50');
+        $("button[name='maxValue'].btn-outline-light").attr('class', 'btn btn-outline-light');
+        $("#minus").attr('class', "btn btn-outline-light");
+        $("#plus").attr('class', "btn btn-outline-light");
+        $("button.btn-secondary").attr('class', 'btn btn-light w-50');
+        $("button[name='maxValue'].btn-light").attr('class', 'btn btn-light');
+    });
+
     const updateMaxValue = () => {
         let max = 0;
         let inputs = $('input[name="binaryInput"]');
