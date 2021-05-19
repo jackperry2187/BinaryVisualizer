@@ -55,6 +55,15 @@
 
     const updateDecimalInput = () => {
         let inputs = $('input[name="binaryInput"]');
+        inputs.each((index, element) => {
+            console.log($(element));
+            if($(element).val() > 1) {
+                $(element).val(1);
+            }
+            else if($(element).val() < 0) {
+                $(element).val(0);
+            }
+        });
         calcDirection();
         let total = 0;
         if(direction == "rl") {
