@@ -12,6 +12,42 @@
     let oldBytes = 0;
     let direction;
     
+    const updateBinaryInputs = () => {
+        let inputs = $('input[name="binaryInput"]');
+        calcDirection();
+        let total = 0;
+        inputs.each((index) => {
+            $($(`input[name="binaryInput"]`)[index]).val(0);
+        })
+        if(direction == "rl") {
+            inputs.each((index) => {
+                if(total == decimal.val()) return;
+                let power = Math.pow(2, parseInt(bits.val())-1-index);
+                if(total + power <= decimal.val()) {
+                    $($(`input[name="binaryInput"]`)[index]).val(1);
+                    total += power;
+                }
+            });
+        }
+        else if(direction == "lr") {
+            inputs.each((index) => {
+                index = parseInt(bits.val())-1-index;
+                if(total == decimal.val()) return;
+                let power = Math.pow(2, index);
+                if(total + power <= decimal.val()) {
+                    $($(`input[name="binaryInput"]`)[index]).val(1);
+                    total += power;
+                }
+            });
+        }
+    }
+
+    const updateDecimalInput = () => {
+
+    }
+
+    decimal.change(() => updateBinaryInputs());
+
     const initialize = () => {
         for(let x = 0; x < bits.val(); x++) {
             $('<input>')
@@ -22,7 +58,8 @@
                 placeholder: 0,
                 class: "form-control"
             })
-            .appendTo(binaryInputs);
+            .appendTo(binaryInputs)
+            .change(() => updateDecimalInput());
         }
     }
 
@@ -51,7 +88,8 @@
                 placeholder: 0,
                 class: "form-control"
             })
-            .appendTo(binaryInputs);
+            .appendTo(binaryInputs)
+            .change(() => updateDecimalInput());
         }
         while(bits.val() != oldBits) {
             inputs = $('input[name="binaryInput"]');
@@ -64,7 +102,8 @@
                     placeholder: 0,
                     class: "form-control"
                 })
-                .insertAfter("#binaryText");
+                .insertAfter("#binaryText")
+                .change(() => updateDecimalInput());
                 oldBits++;
             }
             else if(direction == "rl" && bits.val() < oldBits) {
@@ -80,7 +119,8 @@
                     placeholder: 0,
                     class: "form-control"
                 })
-                .appendTo(binaryInputs);
+                .appendTo(binaryInputs)
+                .change(() => updateDecimalInput());
                 oldBits++;
             }
             else if(direction == "lr" && bits.val() < oldBits) {
@@ -126,6 +166,18 @@
 
     lr.click(() => updateLRRL("lr"));
     rl.click(() => updateLRRL("rl"));
+
+    minus.click(() => { 
+        if(decimal.val() != 0) { 
+            decimal.val(parseInt(decimal.val()) - 1); 
+            updateBinaryInputs(); 
+        }
+    });
+
+    plus.click(() => {
+        decimal.val(parseInt(decimal.val()) + 1);
+        updateBinaryInputs();
+    });
 
     initialize();
 })(window.jQuery);
