@@ -12,6 +12,17 @@
     let oldBytes = 0;
     let direction;
     
+    const updateMaxValue = () => {
+        let max = 0;
+        let inputs = $('input[name="binaryInput"]');
+        inputs.each(() => max++);
+        max = Math.pow(2, max);
+        $('button[name="maxValue"]').attr("class", "btn btn-outline-secondary");
+        $('button[name="maxValue"]').each((index, element) => {
+            if($(element).html() == max-1) $(element).attr("class", "btn btn-secondary");
+        });
+    }
+
     const updateBinaryInputs = () => {
         let inputs = $('input[name="binaryInput"]');
         calcDirection();
@@ -90,21 +101,6 @@
         checkDecimal();
     });
 
-    const initialize = () => {
-        for(let x = 0; x < bits.val(); x++) {
-            $('<input>')
-            .attr({
-                type: 'number',
-                name: "binaryInput",
-                value: 0,
-                placeholder: 0,
-                class: "form-control"
-            })
-            .appendTo(binaryInputs)
-            .change(() => updateDecimalInput());
-        }
-    }
-
     const calcDirection = () => {
         if(rl.hasClass("btn-secondary")) {
             direction = "rl";
@@ -172,6 +168,7 @@
             bytes.val(parseInt(bits.val() / 8));
             oldBytes = bytes.val();
         }
+        updateMaxValue();
     }
 
     bits.change(changeBits);
@@ -209,6 +206,35 @@
 
     lr.click(() => updateLRRL("lr"));
     rl.click(() => updateLRRL("rl"));
+
+    const changeMaxValue = (event) => {
+        $('button[name="maxValue"]').attr("class", "btn btn-outline-secondary");
+        $(event.currentTarget).attr("class", "btn btn-secondary");
+        let total = parseInt($(event.currentTarget).html());
+        let x = 0;
+        while (total > 0) {
+            total = total - Math.pow(2, x);
+            x++;
+        }
+        bits.val(x);
+        changeBits();
+    }
+
+    const initialize = () => {
+        for(let x = 0; x < bits.val(); x++) {
+            $('<input>')
+            .attr({
+                type: 'number',
+                name: "binaryInput",
+                value: 0,
+                placeholder: 0,
+                class: "form-control"
+            })
+            .appendTo(binaryInputs)
+            .change(() => updateDecimalInput());
+        }
+        $('button[name="maxValue"]').click((event) => changeMaxValue(event));
+    }
 
     initialize();
 })(window.jQuery);
