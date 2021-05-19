@@ -175,7 +175,17 @@
     });
 
     plus.click(() => {
-        decimal.val(parseInt(decimal.val()) + 1);
+        let max = 0;
+        let inputs = $('input[name="binaryInput"]');
+        inputs.each(() => max++);
+        max = Math.pow(2, max);
+        console.log(max);   
+        if(decimal.val() >= max-1) {
+            decimal.val(max-1);
+        }
+        else {
+            decimal.val(parseInt(decimal.val()) + 1);
+        }
         updateBinaryInputs();
     });
 
