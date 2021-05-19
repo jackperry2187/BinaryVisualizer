@@ -2,7 +2,7 @@
 A website to visualize binary and decimal conversions  
 Jackson Perry 5/18/2021  
 
-![Index Screen](https://i.imgur.com/54JDyyn.png)
+![Index Screen](https://i.imgur.com/AaIJcsX.png)
 ## Setup  
 Clone the repository, then double click the `run` file. 
 This file start everything for you, meaning it will:  
