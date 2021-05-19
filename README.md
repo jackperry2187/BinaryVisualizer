@@ -14,7 +14,9 @@ From there, simply enter the desired amount of bits or bytes you're working with
 
 ## Skills Used
 - Node
+  - Express
+  - Handlebars
 - JQuery
-- Express
-- Handlebars
 - Bootstrap 5
+- HTML5
+- JavaScript
