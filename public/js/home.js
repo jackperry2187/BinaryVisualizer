@@ -43,10 +43,52 @@
     }
 
     const updateDecimalInput = () => {
-
+        let inputs = $('input[name="binaryInput"]');
+        calcDirection();
+        let total = 0;
+        if(direction == "rl") {
+            inputs.each((index, element) => {
+                index = parseInt(bits.val())-1-index;
+                let value = $(element).val();
+                if(value == 1) total+= Math.pow(2, index);
+            });
+        }
+        else if(direction == "lr") {
+            inputs.each((index, element) => {
+                let value = $(element).val();
+                if(value == 1) total+= Math.pow(2, index);
+            });
+        }
+        decimal.val(total);
+    }
+    
+    let checkDecimal = () => {
+        if(decimal.val() < 0) {
+            decimal.val(0);
+        }
+        else {
+            let max = 0;
+            let inputs = $('input[name="binaryInput"]');
+            inputs.each(() => max++);
+            max = Math.pow(2, max); 
+            if(decimal.val() >= max-1) {
+                decimal.val(max-1);
+            }
+        }
+        updateBinaryInputs();
     }
 
-    decimal.change(() => updateBinaryInputs());
+    decimal.change(() => checkDecimal());
+
+    minus.click(() => { 
+        decimal.val(parseInt(decimal.val()) - 1);
+        checkDecimal();
+    });
+
+    plus.click(() => {
+        decimal.val(parseInt(decimal.val()) + 1);
+        checkDecimal();
+    });
 
     const initialize = () => {
         for(let x = 0; x < bits.val(); x++) {
@@ -162,32 +204,11 @@
             rl.attr("class", "btn btn-secondary w-50");
             calcDirection();
         } 
+        updateDecimalInput();
     }
 
     lr.click(() => updateLRRL("lr"));
     rl.click(() => updateLRRL("rl"));
-
-    minus.click(() => { 
-        if(decimal.val() != 0) { 
-            decimal.val(parseInt(decimal.val()) - 1); 
-            updateBinaryInputs(); 
-        }
-    });
-
-    plus.click(() => {
-        let max = 0;
-        let inputs = $('input[name="binaryInput"]');
-        inputs.each(() => max++);
-        max = Math.pow(2, max);
-        console.log(max);   
-        if(decimal.val() >= max-1) {
-            decimal.val(max-1);
-        }
-        else {
-            decimal.val(parseInt(decimal.val()) + 1);
-        }
-        updateBinaryInputs();
-    });
 
     initialize();
 })(window.jQuery);
