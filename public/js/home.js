@@ -2,14 +2,17 @@
     let bits = $('#bits');
     let bytes = $('#bytes');
     let binaryInputs = $('#binaryInputs');
-    let direction = $('input[name="direction"]:checked');
+    let rl = $('#rl');
+    let lr = $('#lr');
+    let minus = $('#minus');
     let decimal = $('#decimal');
     let plus = $('#plus');
-    let minus = $('#minus');
+    
     let oldBits = 4;
     let oldBytes = 0;
+    let direction;
     
-    function initialize() {
+    const initialize = () => {
         for(let x = 0; x < bits.val(); x++) {
             $('<input>')
             .attr({
@@ -17,56 +20,70 @@
                 name: "binaryInput",
                 value: 0,
                 placeholder: 0,
+                class: "form-control"
             })
             .appendTo(binaryInputs);
         }
     }
 
+    const calcDirection = () => {
+        if(rl.hasClass("btn-secondary")) {
+            direction = "rl";
+        }
+        else if(lr.hasClass("btn-secondary")) {
+            direction = "lr";
+        }
+    }
+
     const changeBits = () => {
         binaryInputs = $('#binaryInputs');
-        direction = $('input[name="direction"]:checked');
+        let inputs = $('input[name="binaryInput"]');
+        calcDirection();
         if(bits.val() < 1) {
             oldBits = 1;
             bits.val(1);
-            binaryInputs.empty().append(
-                $('<input>')
-                .attr({
-                    type: 'number',
-                    name: "binaryInput",
-                    value: 0,
-                    placeholder: 0,
-                })
-            );
+            inputs.remove();
+            $('<input>')
+            .attr({
+                type: 'number',
+                name: "binaryInput",
+                value: 0,
+                placeholder: 0,
+                class: "form-control"
+            })
+            .appendTo(binaryInputs);
         }
         while(bits.val() != oldBits) {
-            if(direction.val() == "rl" && bits.val() > oldBits) {
+            if(direction == "rl" && bits.val() > oldBits) {
                 $('<input>')
                 .attr({
                     type: 'number',
                     name: "binaryInput",
                     value: 0,
                     placeholder: 0,
+                    class: "form-control"
                 })
-                .prependTo(binaryInputs);
+                .insertAfter("#binaryText");
                 oldBits++;
             }
-            else if(direction.val() == "rl" && bits.val() < oldBits) {
-                binaryInputs.children().first().remove();
+            else if(direction == "rl" && bits.val() < oldBits) {
+                inputs.first().remove();
                 oldBits--;
             }
-            else if(direction.val() == "lr" && bits.val() > oldBits) {
+            else if(direction == "lr" && bits.val() > oldBits) {
                 $('<input>')
                 .attr({
                     type: 'number',
                     name: "binaryInput",
                     value: 0,
                     placeholder: 0,
+                    class: "form-control"
                 })
                 .appendTo(binaryInputs);
                 oldBits++;
             }
-            else if(direction.val() == "lr" && bits.val() < oldBits) {
-                binaryInputs.children().last().remove();
+            else if(direction == "lr" && bits.val() < oldBits) {
+                inputs.last().remove();
                 oldBits--;
             }
             bytes.val(parseInt(bits.val() / 8));

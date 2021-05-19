@@ -1,35 +1,27 @@
-<div id="bitbytesRow">
-    <label>
-        Bits:
-        <input type="number" id="bits" placeholder="0" value="4">
-    </label>
-    <label>
-        Bytes:
-        <input type="number" id="bytes" placeholder="0" value="0">
-    </label>
+<div id="bitbytesRow" class="mt-3">
+    <div class="input-group mb-3">
+        <span class="input-group-text">Bits: </span>
+        <input type="number" id="bits" placeholder="0" value="4" class="form-control">
+        <span class="input-group-text">Bytes: </span>
+        <input type="number" id="bytes" placeholder="0" value="0" class="form-control">
+    </div>
 </div>
 
-<div id="binaryRow">
-    <label>
-        Binary:
-        <div id="binaryInputs">
-
-        </div>
-    </label>
-    <label>
-        Direction:
-        <input type="radio" id="rl" name="direction" value="rl" checked>
-        <label for="rl">Right -> Left</label>
-        <input type="radio" id="lr" name="direction" value="lr">
-        <label for="lr">Left -> Right</label>
-    </label>
+<div id="binaryRow" class="mb-3">
+    <div id="binaryInputs" class="input-group col-8">
+        <span class="input-group-text" id="binaryText">Binary: </span>
+    </div>
+    <div class="input-group">
+        <button type="button" id="rl" class="btn btn-secondary w-50">Right -> Left</button>
+        <button type="button" id="lr" class="btn btn-outline-secondary w-50">Left -> Right</button>
+    </div>
 </div>
 
 <div id="decimalRow">
-    <label>
-        Decimal:
-        <button type="button" id="minus">-</button>
-        <input type="number" id="decimal" placeholder="0" value="0">
-        <button type="button" id="plus">+</button>
-    </label>
+    <div class="input-group mb-3">
+        <span class="input-group-text">Decimal: </span>
+        <button type="button" id="minus" class="btn btn-outline-secondary">-</button>
+        <input type="number" id="decimal" placeholder="0" value="0" class="form-control">
+        <button type="button" id="plus" class="btn btn-outline-secondary">+</button>
+    </div>
 </div>
