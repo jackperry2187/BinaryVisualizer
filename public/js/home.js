@@ -13,37 +13,44 @@
     let oldBits = 4;
     let oldBytes = 0;
     let direction;
+    let mode = "light";
     
     lightMode.click(() => {
-        lightMode.attr('class', 'btn btn-secondary w-50');
-        darkMode.attr('class', 'btn btn-outline-secondary w-50');
+        if(mode != "light") {
+            lightMode.attr('class', 'btn btn-secondary w-50');
+            darkMode.attr('class', 'btn btn-outline-secondary w-50');
 
-        $("h1").attr('class', 'text-center display-3');
-        $(".bg-dark").attr('class', 'bg-light');
-        $("input[type='number']").attr('class', 'form-control');
-        $("span.input-group-text").attr('class', 'input-group-text');
-        $("button.btn-outline-light").attr('class', 'btn btn-outline-secondary w-50');
-        $("button[name='maxValue'].btn-outline-secondary").attr('class', 'btn btn-outline-secondary');
-        $("#minus").attr('class', "btn btn-outline-secondary");
-        $("#plus").attr('class', "btn btn-outline-secondary");
-        $("button.btn-light").attr('class', 'btn btn-secondary w-50');
-        $("button[name='maxValue'].btn-secondary").attr('class', 'btn btn-secondary');
+            $("h1").attr('class', 'text-center display-3');
+            $(".bg-dark").attr('class', 'bg-light');
+            $("input[type='number']").attr('class', 'form-control');
+            $("span.input-group-text").attr('class', 'input-group-text');
+            $("button.btn-outline-light").attr('class', 'btn btn-outline-secondary w-50');
+            $("button[name='maxValue'].btn-outline-secondary").attr('class', 'btn btn-outline-secondary');
+            $("#minus").attr('class', "btn btn-outline-secondary");
+            $("#plus").attr('class', "btn btn-outline-secondary");
+            $("button.btn-light").attr('class', 'btn btn-secondary w-50');
+            $("button[name='maxValue'].btn-secondary").attr('class', 'btn btn-secondary');
+            mode = "light";
+        }
     });
 
     darkMode.click(() => {
-        lightMode.attr('class', 'btn btn-outline-secondary w-50');
-        darkMode.attr('class', 'btn btn-secondary w-50');
-
-        $("h1").attr('class', 'text-center display-3 text-white');
-        $(".bg-light").attr('class', 'bg-dark');
-        $("input[type='number']").attr('class', 'form-control bg-dark text-light');
-        $("span.input-group-text").attr('class', 'input-group-text bg-light text-dark');
-        $("button.btn-outline-secondary").attr('class', 'btn btn-outline-light w-50');
-        $("button[name='maxValue'].btn-outline-light").attr('class', 'btn btn-outline-light');
-        $("#minus").attr('class', "btn btn-outline-light");
-        $("#plus").attr('class', "btn btn-outline-light");
-        $("button.btn-secondary").attr('class', 'btn btn-light w-50');
-        $("button[name='maxValue'].btn-light").attr('class', 'btn btn-light');
+        if(mode != "dark") {
+            lightMode.attr('class', 'btn btn-outline-secondary w-50');
+            darkMode.attr('class', 'btn btn-secondary w-50');
+    
+            $("h1").attr('class', 'text-center display-3 text-white');
+            $(".bg-light").attr('class', 'bg-dark');
+            $("input[type='number']").attr('class', 'form-control bg-dark text-light');
+            $("span.input-group-text").attr('class', 'input-group-text bg-light text-dark');
+            $("button.btn-outline-secondary").attr('class', 'btn btn-outline-light w-50');
+            $("button[name='maxValue'].btn-outline-light").attr('class', 'btn btn-outline-light');
+            $("#minus").attr('class', "btn btn-outline-light");
+            $("#plus").attr('class', "btn btn-outline-light");
+            $("button.btn-secondary").attr('class', 'btn btn-light w-50');
+            $("button[name='maxValue'].btn-light").attr('class', 'btn btn-light');
+            mode = "dark";
+        }
     });
 
     const updateMaxValue = () => {
@@ -51,9 +58,13 @@
         let inputs = $('input[name="binaryInput"]');
         inputs.each(() => max++);
         max = Math.pow(2, max);
-        $('button[name="maxValue"]').attr("class", "btn btn-outline-secondary");
+        if(mode == "light") $('button[name="maxValue"]').attr("class", "btn btn-outline-secondary");
+        else if(mode == "dark") $('button[name="maxValue"]').attr("class", "btn btn-outline-light");
         $('button[name="maxValue"]').each((index, element) => {
-            if($(element).html() == max-1) $(element).attr("class", "btn btn-secondary");
+            if($(element).html() == max-1) {
+                if(mode == "light") $(element).attr("class", "btn btn-secondary");
+                else if(mode == "dark") $(element).attr("class", "btn btn-light");
+            }
         });
     }
 
@@ -90,7 +101,6 @@
     const updateDecimalInput = () => {
         let inputs = $('input[name="binaryInput"]');
         inputs.each((index, element) => {
-            console.log($(element));
             if($(element).val() > 1) {
                 $(element).val(1);
             }
@@ -145,10 +155,10 @@
     });
 
     const calcDirection = () => {
-        if(rl.hasClass("btn-secondary")) {
+        if(rl.hasClass("btn-secondary") || rl.hasClass("btn-light")) {
             direction = "rl";
         }
-        else if(lr.hasClass("btn-secondary")) {
+        else if(lr.hasClass("btn-secondary") || lr.hasClass("btn-light")) {
             direction = "lr";
         }
     }
@@ -161,30 +171,33 @@
             oldBits = 1;
             bits.val(1);
             inputs.remove();
-            $('<input>')
+            let input = $('<input>')
             .attr({
                 type: 'number',
                 name: "binaryInput",
                 value: 0,
                 placeholder: 0,
-                class: "form-control"
             })
-            .appendTo(binaryInputs)
-            .change(() => updateDecimalInput());
+            .appendTo(binaryInputs);
+            if(mode == "light") input.attr('class', 'form-control');
+            else if(mode == "dark") input.attr('class', 'form-control bg-dark text-light');
+            
+            input.change(() => updateDecimalInput());
         }
         while(bits.val() != oldBits) {
             inputs = $('input[name="binaryInput"]');
             if(direction == "rl" && bits.val() > oldBits) {
-                $('<input>')
+                let input = $('<input>')
                 .attr({
                     type: 'number',
                     name: "binaryInput",
                     value: 0,
                     placeholder: 0,
-                    class: "form-control"
                 })
-                .insertAfter("#binaryText")
-                .change(() => updateDecimalInput());
+                .insertAfter("#binaryText");
+                if(mode == "light") input.attr('class', 'form-control');
+                else if(mode == "dark") input.attr('class', 'form-control bg-dark text-light');
+                input.change(() => updateDecimalInput());
                 oldBits++;
             }
             else if(direction == "rl" && bits.val() < oldBits) {
@@ -192,16 +205,17 @@
                 oldBits--;
             }
             else if(direction == "lr" && bits.val() > oldBits) {
-                $('<input>')
+                let input = $('<input>')
                 .attr({
                     type: 'number',
                     name: "binaryInput",
                     value: 0,
                     placeholder: 0,
-                    class: "form-control"
                 })
-                .appendTo(binaryInputs)
-                .change(() => updateDecimalInput());
+                .appendTo(binaryInputs);
+                if(mode == "light") input.attr('class', 'form-control');
+                else if(mode == "dark") input.attr('class', 'form-control bg-dark text-light');
+                input.change(() => updateDecimalInput());
                 oldBits++;
             }
             else if(direction == "lr" && bits.val() < oldBits) {
@@ -235,13 +249,26 @@
 
     const updateLRRL = (value) => {
         if(value == "lr" && direction != "lr") {
-            lr.attr("class", "btn btn-secondary w-50");
-            rl.attr("class", "btn btn-outline-secondary w-50");
+            if(mode == "light") {
+                lr.attr("class", "btn btn-secondary w-50");
+                rl.attr("class", "btn btn-outline-secondary w-50");
+            }
+            else if(mode == "dark") {
+                lr.attr("class", "btn btn-light w-50");
+                rl.attr("class", "btn btn-outline-light w-50");
+            }
+            
             calcDirection();
         }   
         else if(value == "rl" && direction != "rl") {
-            lr.attr("class", "btn btn-outline-secondary w-50");
-            rl.attr("class", "btn btn-secondary w-50");
+            if(mode == "light") {
+                lr.attr("class", "btn btn-outline-secondary w-50");
+                rl.attr("class", "btn btn-secondary w-50");
+            }
+            if(mode == "dark") {
+                lr.attr("class", "btn btn-outline-light w-50");
+                rl.attr("class", "btn btn-light w-50");
+            }
             calcDirection();
         } 
         updateDecimalInput();
@@ -251,8 +278,14 @@
     rl.click(() => updateLRRL("rl"));
 
     const changeMaxValue = (event) => {
-        $('button[name="maxValue"]').attr("class", "btn btn-outline-secondary");
-        $(event.currentTarget).attr("class", "btn btn-secondary");
+        if(mode == "light") {
+            $('button[name="maxValue"]').attr("class", "btn btn-outline-secondary");
+            $(event.currentTarget).attr("class", "btn btn-secondary");
+        }
+        else if(mode == "dark") {
+            $('button[name="maxValue"]').attr("class", "btn btn-outline-light");
+            $(event.currentTarget).attr("class", "btn btn-light");
+        }
         let total = parseInt($(event.currentTarget).html());
         let x = 0;
         while (total > 0) {
@@ -265,16 +298,17 @@
 
     const initialize = () => {
         for(let x = 0; x < bits.val(); x++) {
-            $('<input>')
+            let input = $('<input>')
             .attr({
                 type: 'number',
                 name: "binaryInput",
                 value: 0,
                 placeholder: 0,
-                class: "form-control"
             })
-            .appendTo(binaryInputs)
-            .change(() => updateDecimalInput());
+            .appendTo(binaryInputs);
+            if(mode == "light") input.attr('class', 'form-control');
+            else if(mode == "dark") input.attr('class', 'form-control bg-dark text-light');
+            input.change(() => updateDecimalInput());
         }
         $('button[name="maxValue"]').click((event) => changeMaxValue(event));
     }
