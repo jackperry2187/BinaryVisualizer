@@ -54,6 +54,7 @@
             .appendTo(binaryInputs);
         }
         while(bits.val() != oldBits) {
+            inputs = $('input[name="binaryInput"]');
             if(direction == "rl" && bits.val() > oldBits) {
                 $('<input>')
                 .attr({
@@ -109,6 +110,22 @@
         oldBytes = bytes.val();
         changeBits();
     });
+
+    const updateLRRL = (value) => {
+        if(value == "lr" && direction != "lr") {
+            lr.attr("class", "btn btn-secondary w-50");
+            rl.attr("class", "btn btn-outline-secondary w-50");
+            calcDirection();
+        }   
+        else if(value == "rl" && direction != "rl") {
+            lr.attr("class", "btn btn-outline-secondary w-50");
+            rl.attr("class", "btn btn-secondary w-50");
+            calcDirection();
+        } 
+    }
+
+    lr.click(() => updateLRRL("lr"));
+    rl.click(() => updateLRRL("rl"));
 
     initialize();
 })(window.jQuery);
